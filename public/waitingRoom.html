@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="">
+    <title>Waiting Room</title>
+    
+</head>
+<body>
+    <link rel="stylesheet" href="./styles/waitingRoomStyle.css">
+    <div class="container" id="container">
+        <div class="row">
+            <div class="box" id="box1">
+                <label class="label" id="label1">1</label>
+                <button id="kick1" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box2">
+                <label class="label" id="label2">2</label>
+                <button class="invisible" id="kick2" >kick</button>
+            </div>
+            <div class="box" id="box3">
+                <label class="label" id="label3">3</label>
+                <button id="kick3" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box4">
+                <label class="label" id="label4">4</label>
+                <button id="kick4" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box5">
+                <label class="label" id="label5">5</label>
+                <button id="kick5" class="invisible">kick</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="box" id="box6">
+                <label class="label" id="label6">6</label>
+                <button id="kick6" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box7">
+                <label class="label" id="label7">7</label>
+                <button id="kick7" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box8">
+                <label class="label" id="label8">8</label>
+                <button id="kick8" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box9">
+                <label class="label" id="label9">9</label>
+                <button id="kick9" class="invisible">kick</button>
+            </div>
+            <div class="box" id="box10">
+                <label class="label" id="label10">10</label>
+                <button id="kick10" class="invisible">kick</button>
+            </div>
+        </div>
+        <button id="startButton" class="invisible">Start Game</button>
+    </div>
+
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.emit("checkCookie", false);
+        socket.on("restart", () =>{
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "index.html";
+            //window.location.reload();
+        })
+        socket.on("normal", () => {
+            socket.emit("requestNames");
+        })
+        socket.on("receiveNames", (players, isLeader) => {
+            for(let i = 0; i < players.length; i++){
+                //console.log(players[i].name);
+                document.getElementById("label" + (i + 1).toString()).innerText = players[i]._name;
+            }
+            for(let i = players.length; i < 10; i++){
+                document.getElementById("label" + (i + 1).toString()).innerText = (i + 1).toString();
+            }
+            if(isLeader){
+                for(let i = 1; i < players.length; i++){
+                    var name = "kick" + (i + 1).toString();
+                    var ele = document.getElementById(name);
+                    console.log(ele);
+                    ele.className = "visible";
+                }
+                for(let i = players.length; i < 10; i++)
+                {
+                    var name = "kick" + (i + 1).toString();
+                    var ele = document.getElementById(name);
+                    console.log(ele);
+                    ele.className = "invisible";
+                }
+                if(players.length >= 3){
+                    document.getElementById("startButton").className = "visible";
+                }
+            }
+
+        })
+        socket.on("alert", (message) =>{
+            window.alert(message);
+        })
+        
+        socket.on("gotoIndex", () =>{
+            //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "index.html";
+        })
+        for(let i = 1; i <= 10; i++){
+            document.getElementById('kick' + i).addEventListener('click', (e) => {
+                e.preventDefault();
+                socket.emit("kick", i);
+            });
+        }
+        
+
+        socket.on("kicked", () => {
+            window.alert("You have been kicked from the room");
+            window.location.href = "index.html";
+        });
+
+        document.getElementById("startButton").addEventListener("click", (e) => {
+            e.preventDefault();
+            socket.emit("start");
+        })
+
+        socket.on("gameStarted", () => {
+            window.location.href = "game.html";
+        })
+        
+        
+        
+
+    
+
+        
+        
+        
+        
+    </script>
+
+</body>
+</html>

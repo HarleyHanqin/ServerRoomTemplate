@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="">
+    <title>Forest Evolution</title>
+    
+</head>
+<body>
+    <link rel="stylesheet" href="./styles/indexStyle.css">
+    <form id="gotoRoom" class = "" action="">
+        <label id="gotoRoomLabel">Create or join a room:</label>
+        <input id="roomNumber" placeholder = "Enter Room Number"/>
+        <label id="enterNameLabel">Enter Your Name:</label>
+        <input id="enterName" placeholder = "Name"/>
+        <button id="createButton">Create</button>
+        <button id="joinButton"Join>Join</button>
+    </form>
 
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // Send a message when the form is submitted   
+        //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        const socket = io();
+        socket.emit("checkCookie", true);
+        console.log(document.cookie);
+        socket.on("restart", () =>{
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            //window.location.href = "index.html";
+            window.location.reload();
+        })
+        socket.on("createCookie", (id) => {
+            //setTimeout(console.log(id), 5000);
+            //console.log(serverID);
+            //console.log(id);
+            var d = new Date();
+            var days = 1;
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = ""+d.toUTCString();
+            console.log(id);
+            
+            document.cookie = ("username=" + id + ";expires=" + expires + ";");
+            console.log(document.cookie);
+        })
+
+        socket.on("alert", (message) => {
+            window.alert(message);
+        })
+
+        socket.on("success", () => {
+            document.getElementById("gotoRoom").className = "invisible";
+            window.location.href = "waitingRoom.html";
+        })
+
+        socket.on("restart", () =>{
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.reload();
+        })
+
+        document.getElementById('gotoRoom').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const room = document.getElementById('roomNumber');
+            const roomNumber = room.value;
+            const clickedButton = e.submitter;
+            const nameElement = document.getElementById('enterName');
+            const name = nameElement.value;
+            if(clickedButton.id === 'createButton'){
+                socket.emit('createRoom', roomNumber, name);
+                console.log(name + " created " + roomNumber)
+            }
+            //add Resume Button
+            else{
+                socket.emit('joinRoom', roomNumber, name);
+                console.log(name + " joined " + roomNumber)
+            }
+            
+            
+        });
+
+        
+        
+        
+        
+    </script>
+
+</body>
+</html>
