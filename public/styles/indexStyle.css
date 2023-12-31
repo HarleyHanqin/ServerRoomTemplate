@@ -1,1 +1,102 @@
+body {
+    margin: 20px;
+    padding: 20px;
+    background-image: url('../images/forest.jpg');
+    background-size:cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
 
+/* Style for the header */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Style for the main content area */
+main {
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Style for links */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style for buttons */
+button, input[type="button"], input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Style for a simple container with a background image */
+
+.invisible{
+    visibility: hidden;
+}
+
+
+#gotoRoom{
+    display: flex; 
+    flex-direction:column;
+    font-family: Segoe UI, Helvetica, Arial, sans-serif;
+    border-radius: 100px;
+    width:fit-content;
+    height:fit-content;
+    align-items: center;
+    justify-content: center;
+    
+    #gotoRoomLabel, #enterNameLabel{
+        position:relative;
+        top:-10px;
+        background-color: aqua;
+        border-radius: 30px;
+        text-align: center;
+        padding: 15px;
+        width:200px;
+        height:30px;
+
+    };
+    #roomNumber, #enterName{
+        width:150px;
+        height:30px;
+        margin-bottom: 15px;
+    }
+    #createButton{
+        position:relative;
+        top:10px;
+        left:-40px;
+        text-align: center;
+        width:70px;
+        height:40px;
+
+    }
+    #joinButton{
+        position:relative;
+        top:-30px;
+        left:40px;
+        text-align: center;
+        width:70px;
+        height:40px;
+        
+    }
+}
